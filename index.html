@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Entrepreneurship & Design Thinking</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .content-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .content-wrapper::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 3.8em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 35px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 18px;
+        }
+
+        .subtitle {
+            font-size: 1.8em;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 400;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 25px 0;
+        }
+
+        li {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #333;
+            margin: 18px 0;
+            padding-left: 45px;
+            position: relative;
+        }
+
+        li:before {
+            content: "✓";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fef4ff 100%);
+            padding: 25px;
+            border-radius: 18px;
+            margin: 18px 0;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .step-box:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.25);
+        }
+
+        .step-box h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.35em;
+            color: #555;
+            padding: 35px;
+            border-left: 6px solid #764ba2;
+            background: rgba(118, 75, 162, 0.08);
+            margin: 30px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .author {
+            text-align: right;
+            font-weight: 600;
+            color: #764ba2;
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            color: white;
+            font-size: 1.3em;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-slide::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .title-slide h1 {
+            -webkit-text-fill-color: white;
+            font-size: 4.5em;
+            text-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-slide .subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 2.2em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            display: inline-block;
+            animation: bounce 2s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fef4ff 100%);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            border: 2px solid #667eea;
+        }
+
+        strong {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .example {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.1) 100%);
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin-top: 18px;
+            font-style: italic;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+            font-weight: 500;
+        }
+
+        .highlight-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .formula-container {
+            text-align: center;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .formula-container p {
+            font-size: 2.5em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+                display: block !important;
+                position: relative;
+                height: 100vh;
+                opacity: 1 !important;
+            }
+            .controls, .slide-number {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .slide {
+                padding: 40px 30px;
+            }
+            .content-wrapper {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2.5em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <h1><span class="emoji">🌍</span> Social Entrepreneurship<br>& Design Thinking</h1>
+            <p class="subtitle">Creating Positive Change Through Innovation</p>
+        </div>
+
+        <!-- Slide 2: What Is a Social Entrepreneur -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">💡</span> What Is a Social Entrepreneur?</h2>
+                <div class="box">
+                    <p style="font-size: 1.4em;"><strong>A social entrepreneur runs a business to solve societal problems, not just to make profits.</strong></p>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Traditional Entrepreneur</h3>
+                        <p>Profit-driven mindset</p>
+                    </div>
+                    <div class="card">
+                        <h3>Social Entrepreneur</h3>
+                        <p>Impact-driven mindset</p>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; font-size: 1.3em;">Instead of asking <em>"How can I make more money?"</em>, they ask <em>"How can I create lasting change while sustaining my mission?"</em></p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Core Principles -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🎯</span> Core Principles</h2>
+                <ul>
+                    <li><strong>Impact Over Income</strong> – Social good takes priority over profit maximization</li>
+                    <li><strong>Innovation-Driven</strong> – Creative solutions to tackle persistent problems</li>
+                    <li><strong>Sustainable Models</strong> – Generate enough revenue to keep the mission alive</li>
+                    <li><strong>Measurable Change</strong> – Track real-world impact and outcomes</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Journey -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🚀</span> The Social Entrepreneurship Journey</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">🔎</span> Step 1: Identify the Problem</h3>
+                    <p>Discover genuine issues affecting communities</p>
+                    <div class="example">Example: Lack of fresh grocery access for elderly residents</div>
+                </div>
+                <div class="step-box">
+                    <h3><span class="emoji">📋</span> Step 2: Design Your Solution</h3>
+                    <p>Create an actionable plan to address the problem</p>
+                    <div class="example">Example: Volunteer-driven grocery delivery service</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Journey Continued -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🚀</span> The Social Entrepreneurship Journey</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">🛠️</span> Step 3: Prototype & Test</h3>
+                    <p>Launch a small-scale pilot to validate your approach</p>
+                    <div class="example">Example: Serve 10 customers in one neighborhood</div>
+                </div>
+                <div class="step-box">
+                    <h3><span class="emoji">📈</span> Step 4: Scale Your Impact</h3>
+                    <p>Expand to reach more people and create systemic change</p>
+                    <div class="example">Example: Grow to 500+ seniors across the city</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: What Is Design Thinking -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🎨</span> What Is Design Thinking?</h2>
+                <div class="box">
+                    <p style="font-size: 1.4em;"><strong>A human-centered methodology for solving complex problems through deep empathy and iterative experimentation.</strong></p>
+                </div>
+                <p style="margin-top: 30px;"><strong>Why It Works:</strong></p>
+                <p>Traditional problem-solving starts with solutions. Design thinking starts with <strong>understanding people</strong>.</p>
+                <div class="quote">
+                    "Design thinking is a human-centered approach to innovation that integrates the needs of people, the possibilities of technology, and the requirements for business success."
+                    <div class="author">— Tim Brown, CEO of IDEO</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Design Thinking Advantage -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🌟</span> The Design Thinking Advantage</h2>
+                <ul>
+                    <li><strong>Human-Centric</strong> – Solutions built around real needs, not assumptions</li>
+                    <li><strong>Collaborative</strong> – Diverse perspectives fuel breakthrough ideas</li>
+                    <li><strong>Risk-Reduction</strong> – Early testing prevents costly mistakes</li>
+                    <li><strong>Competitive Edge</strong> – Continuous innovation keeps you ahead</li>
+                </ul>
+                <div class="box" style="margin-top: 40px;">
+                    <h3>Success Story: Airbnb</h3>
+                    <p>Airbnb was struggling until they used design thinking. By visiting hosts and understanding their photo challenges, they helped improve listings.</p>
+                    <p style="font-size: 1.5em; color: #667eea; font-weight: bold; margin-top: 15px;">Result? Bookings doubled overnight.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Stage 1 Empathize -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🔄</span> The 5 Stages of Design Thinking</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">💙</span> Stage 1: Empathize</h3>
+                    <p><strong>Deeply understand your users' experiences</strong></p>
+                    <ul>
+                        <li>Conduct in-depth interviews</li>
+                        <li>Observe real-world behavior</li>
+                        <li>Listen without preconceptions</li>
+                    </ul>
+                    <div class="example">Banking app team spent days observing seniors struggle with complex interfaces</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Stage 2 Define -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🔄</span> The 5 Stages of Design Thinking</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">🎯</span> Stage 2: Define</h3>
+                    <p><strong>Articulate the core problem clearly</strong></p>
+                    <ul>
+                        <li>Synthesize research insights</li>
+                        <li>Craft precise problem statements</li>
+                        <li>Develop user personas</li>
+                    </ul>
+                    <div class="example">"Seniors need simple bank balance checking without navigating 15 confusing menus because complexity causes frustration and abandonment."</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Stage 3 Ideate -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🔄</span> The 5 Stages of Design Thinking</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">💡</span> Stage 3: Ideate</h3>
+                    <p><strong>Generate diverse solutions without constraints</strong></p>
+                    <ul>
+                        <li>Embrace wild ideas</li>
+                        <li>Build on team suggestions</li>
+                        <li>Quantity over quality initially</li>
+                    </ul>
+                    <div class="example">Voice banking, one-tap balance checker, live video banker support — all ideas get captured</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Stage 4 Prototype -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🔄</span> The 5 Stages of Design Thinking</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">🛠️</span> Stage 4: Prototype</h3>
+                    <p><strong>Create low-fidelity versions for quick testing</strong></p>
+                    <ul>
+                        <li>Build simple mockups (even paper works!)</li>
+                        <li>Prioritize speed over perfection</li>
+                        <li>Develop multiple alternatives</li>
+                    </ul>
+                    <div class="example">Paper app interface where seniors "tap" to show preferred button placements</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Stage 5 Test -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🔄</span> The 5 Stages of Design Thinking</h2>
+                <div class="step-box">
+                    <h3><span class="emoji">✅</span> Stage 5: Test</h3>
+                    <p><strong>Validate with real users and iterate</strong></p>
+                    <ul>
+                        <li>Observe actual usage patterns</li>
+                        <li>Gather honest feedback</li>
+                        <li>Refine based on learnings</li>
+                    </ul>
+                    <div class="example">Testing revealed: Big buttons ✓ worked, but font still too small ✗ — back to refinement</div>
+                </div>
+                <p style="margin-top: 30px; font-size: 1.3em; color: #764ba2;"><strong>Remember:</strong> This isn't linear! Jump between stages based on what you discover.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Real Impact Case Study -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🌈</span> Real Impact: Indian Education Case Study</h2>
+                <div class="box">
+                    <h3>The Challenge:</h3>
+                    <p>Rural students couldn't afford textbooks</p>
+                </div>
+                <div class="step-box">
+                    <p><strong>Empathize</strong> → Visited villages, discovered 50 kids sharing one torn book</p>
+                </div>
+                <div class="step-box">
+                    <p><strong>Define</strong> → "Students need affordable, accessible educational content"</p>
+                </div>
+                <div class="step-box">
+                    <p><strong>Ideate</strong> → Mobile libraries, digital tablets, shared resources</p>
+                </div>
+                <div class="step-box">
+                    <p><strong>Prototype</strong> → Solar-powered e-readers with pre-loaded curriculum</p>
+                </div>
+                <div class="step-box">
+                    <p><strong>Test</strong> → 100 devices in one school, gathered user feedback</p>
+                </div>
+                <div class="step-box">
+                    <p><strong>Scale</strong> → Now impacting 10,000+ students across multiple states</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: The Formula -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🌈</span> The Winning Formula</h2>
+                <div class="formula-container">
+                    <p>
+                        <span style="color: #667eea; font-weight: bold;">Social Entrepreneurship</span><br>
+                        <span style="font-size: 0.6em;">(mission)</span><br>
+                        <span style="font-size: 1.2em;">+</span><br>
+                        <span style="color: #764ba2; font-weight: bold;">Design Thinking</span><br>
+                        <span style="font-size: 0.6em;">(method)</span><br>
+                        <span style="font-size: 1.2em;">=</span><br>
+                        <span class="highlight-text" style="font-size: 1.3em;">Transformative Change</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Key Takeaways -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🚀</span> Key Takeaways</h2>
+                <ul>
+                    <li>Social entrepreneurship prioritizes solving problems over maximizing profits</li>
+                    <li>Sustainability is achieved through innovative business models</li>
+                    <li>Design thinking centers on deep human understanding</li>
+                    <li>The iterative cycle: <strong>Empathize → Define → Ideate → Prototype → Test</strong></li>
+                    <li>True innovation emerges from genuine empathy and experimentation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Start Your Journey -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">💪</span> Start Your Impact Journey Today</h2>
+                <p style="font-size: 1.4em; margin-bottom: 30px;">You don't need millions to make a difference. <strong>Start local:</strong></p>
+                <div class="step-box">
+                    <h3>1. Observe</h3>
+                    <p>Find one problem in your community</p>
+                </div>
+                <div class="step-box">
+                    <h3>2. Connect</h3>
+                    <p>Talk to people experiencing it firsthand</p>
+                </div>
+                <div class="step-box">
+                    <h3>3. Clarify</h3>
+                    <p>Define the problem with precision</p>
+                </div>
+                <div class="step-box">
+                    <h3>4. Brainstorm</h3>
+                    <p>Generate solutions with your team</p>
+                </div>
+                <div class="step-box">
+                    <h3>5. Experiment</h3>
+                    <p>Test a minimal version of your idea</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Final Thought -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <h2><span class="emoji">🎯</span> Final Thought</h2>
+                <div class="quote" style="font-size: 1.6em; margin: 50px 0;">
+                    "The best way to predict the future is to create it."
+                    <div class="author">— Peter Drucker</div>
+                </div>
+                <p style="font-size: 1.3em; line-height: 1.8; margin-top: 40px;">Social entrepreneurship and design thinking equip you with the tools to build a future where <strong>business success and positive impact coexist</strong>.</p>
+                <p style="font-size: 1.5em; margin-top: 40px; color: #667eea; font-weight: bold;">Your generation has the power to solve problems others have ignored. Go create change! 🌍✨</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Thank You -->
+        <div class="slide title-slide">
+            <h1><span class="emoji">🎉</span> Thank You!</h1>
+            <p class="subtitle">Questions? Let's discuss how you can apply these frameworks to real-world challenges.</p>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">18</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            } else if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+  </html>
